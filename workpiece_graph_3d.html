@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#4CAF50", "font": {"color": "white"}, "id": 78, "label": "78 (plane)", "shape": "circle", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 79, "label": "79 (cone)", "shape": "triangle", "size": 20}, {"color": "#33C3FF", "font": {"color": "white"}, "id": 80, "label": "80 (torus)", "shape": "diamond", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 81, "label": "81 (cylinder)", "shape": "box", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 82, "label": "82 (cylinder)", "shape": "box", "size": 20}, {"color": "#4CAF50", "font": {"color": "white"}, "id": 83, "label": "83 (plane)", "shape": "circle", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 84, "label": "84 (cone)", "shape": "triangle", "size": 20}, {"color": "#FF5733", "font": {"color": "white"}, "id": 85, "label": "85 (cone)", "shape": "triangle", "size": 20}, {"color": "#4CAF50", "font": {"color": "white"}, "id": 86, "label": "86 (plane)", "shape": "circle", "size": 20}, {"color": "#FFA500", "font": {"color": "white"}, "id": 87, "label": "87 (cylinder)", "shape": "box", "size": 20}, {"color": "#FF5733", "font": {"color": "white"}, "id": 88, "label": "88 (cone)", "shape": "triangle", "size": 20}, {"color": "#FF5733", "font": {"color": "white"}, "id": 89, "label": "89 (cone)", "shape": "triangle", "size": 20}, {"color": "#FFA500", "font": {"color": "white"}, "id": 90, "label": "90 (cylinder)", "shape": "box", "size": 20}, {"color": "#4CAF50", "font": {"color": "white"}, "id": 91, "label": "91 (plane)", "shape": "circle", "size": 20}, {"color": "#33C3FF", "font": {"color": "white"}, "id": 92, "label": "92 (torus)", "shape": "diamond", "size": 20}, {"color": "#33C3FF", "font": {"color": "white"}, "id": 93, "label": "93 (torus)", "shape": "diamond", "size": 20}, {"color": "#4CAF50", "font": {"color": "white"}, "id": 94, "label": "94 (plane)", "shape": "circle", "size": 20}, {"color": "#FFA500", "font": {"color": "white"}, "id": 95, "label": "95 (cylinder)", "shape": "box", "size": 20}, {"color": "#FF5733", "font": {"color": "white"}, "id": 96, "label": "96 (cone)", "shape": "triangle", "size": 20}, {"color": "#33C3FF", "font": {"color": "white"}, "id": 97, "label": "97 (torus)", "shape": "diamond", "size": 20}, {"color": "#FFA500", "font": {"color": "white"}, "id": 98, "label": "98 (cylinder)", "shape": "box", "size": 20}, {"color": "#4CAF50", "font": {"color": "white"}, "id": 99, "label": "99 (plane)", "shape": "circle", "size": 20}, {"color": "#33C3FF", "font": {"color": "white"}, "id": 100, "label": "100 (torus)", "shape": "diamond", "size": 20}, {"color": "#FF5733", "font": {"color": "white"}, "id": 101, "label": "101 (cone)", "shape": "triangle", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 102, "label": "102 (cylinder)", "shape": "box", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 103, "label": "103 (cylinder)", "shape": "box", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 104, "label": "104 (cylinder)", "shape": "box", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 105, "label": "105 (cylinder)", "shape": "box", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 106, "label": "106 (cylinder)", "shape": "box", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 107, "label": "107 (cylinder)", "shape": "box", "size": 20}, {"color": "#4CAF50", "font": {"color": "white"}, "id": 108, "label": "108 (plane)", "shape": "circle", "size": 20}, {"color": "#FFA500", "font": {"color": "white"}, "id": 109, "label": "109 (cylinder)", "shape": "box", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 110, "label": "110 (cone)", "shape": "triangle", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 111, "label": "111 (cone)", "shape": "triangle", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 112, "label": "112 (cone)", "shape": "triangle", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 113, "label": "113 (cone)", "shape": "triangle", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 114, "label": "114 (cone)", "shape": "triangle", "size": 20}, {"color": "lightblue", "font": {"color": "white"}, "id": 115, "label": "115 (cone)", "shape": "triangle", "size": 20}, {"color": "#FF5733", "font": {"color": "white"}, "id": 116, "label": "116 (cone)", "shape": "triangle", "size": 20}]);
+                  edges = new vis.DataSet([{"from": 78, "title": "SMOOTH_CONCAVE", "to": 80, "width": 2}, {"from": 78, "title": "CONVEX", "to": 79, "width": 2}, {"from": 79, "title": "CONVEX", "to": 81, "width": 2}, {"from": 80, "title": "SMOOTH_CONCAVE", "to": 82, "width": 2}, {"from": 81, "title": "CONVEX", "to": 83, "width": 2}, {"from": 82, "title": "CONVEX", "to": 84, "width": 2}, {"from": 83, "title": "CONVEX", "to": 85, "width": 2}, {"from": 84, "title": "CONVEX", "to": 86, "width": 2}, {"from": 85, "title": "CONVEX", "to": 87, "width": 2}, {"from": 86, "title": "CONVEX", "to": 88, "width": 2}, {"from": 87, "title": "CONVEX", "to": 89, "width": 2}, {"from": 88, "title": "CONVEX", "to": 90, "width": 2}, {"from": 89, "title": "CONVEX", "to": 91, "width": 2}, {"from": 90, "title": "SMOOTH_CONCAVE", "to": 92, "width": 2}, {"from": 91, "title": "SMOOTH_CONCAVE", "to": 93, "width": 2}, {"from": 92, "title": "SMOOTH_CONCAVE", "to": 94, "width": 2}, {"from": 93, "title": "SMOOTH_CONCAVE", "to": 95, "width": 2}, {"from": 94, "title": "CONVEX", "to": 96, "width": 2}, {"from": 95, "title": "SMOOTH_CONCAVE", "to": 97, "width": 2}, {"from": 96, "title": "CONVEX", "to": 98, "width": 2}, {"from": 97, "title": "SMOOTH_CONCAVE", "to": 99, "width": 2}, {"from": 98, "title": "SMOOTH_CONCAVE", "to": 100, "width": 2}, {"from": 99, "title": "CONVEX", "to": 101, "width": 2}, {"from": 99, "title": "CONVEX", "to": 102, "width": 2}, {"from": 99, "title": "CONVEX", "to": 103, "width": 2}, {"from": 99, "title": "CONVEX", "to": 104, "width": 2}, {"from": 99, "title": "CONVEX", "to": 105, "width": 2}, {"from": 99, "title": "CONVEX", "to": 106, "width": 2}, {"from": 99, "title": "CONVEX", "to": 107, "width": 2}, {"from": 100, "title": "SMOOTH_CONCAVE", "to": 108, "width": 2}, {"from": 101, "title": "CONVEX", "to": 109, "width": 2}, {"from": 102, "title": "CONVEX", "to": 110, "width": 2}, {"from": 103, "title": "CONVEX", "to": 111, "width": 2}, {"from": 104, "title": "CONVEX", "to": 112, "width": 2}, {"from": 105, "title": "CONVEX", "to": 113, "width": 2}, {"from": 106, "title": "CONVEX", "to": 114, "width": 2}, {"from": 107, "title": "CONVEX", "to": 115, "width": 2}, {"from": 108, "title": "CONVEX", "to": 110, "width": 2}, {"from": 108, "title": "CONVEX", "to": 111, "width": 2}, {"from": 108, "title": "CONVEX", "to": 112, "width": 2}, {"from": 108, "title": "CONVEX", "to": 113, "width": 2}, {"from": 108, "title": "CONVEX", "to": 114, "width": 2}, {"from": 108, "title": "CONVEX", "to": 115, "width": 2}, {"from": 108, "title": "CONVEX", "to": 116, "width": 2}, {"from": 109, "title": "CONVEX", "to": 116, "width": 2}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.05,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
