@@ -1,7 +1,7 @@
 import json
 import networkx as nx
 from pyvis.network import Network
-
+import os
 # ----------------------------------------------
 # Load JSON Data with Error Handling
 # ----------------------------------------------
@@ -85,6 +85,9 @@ def visualize_graph(graph, filename):
         edge_label = edge[2].get("angular_type", "")
         nt.add_edge(edge[0], edge[1], title=edge_label)
 
+    # Define the filename inside the folder
+    filename = os.path.join("graph_diagram", filename)
+
     # Save and open graph visualization
     nt.show(filename, notebook=False)
 
@@ -132,6 +135,9 @@ def visualize_graph_3d(graph, filename):
     for edge in graph.edges(data=True):
         edge_label = edge[2].get("angular_type", "")
         nt.add_edge(edge[0], edge[1], title=edge_label, width=2)
+
+    # Define the filename inside the folder
+    filename = os.path.join("graph_diagram", filename)
 
     # Save and open graph visualization
     nt.show(filename, notebook=False)
